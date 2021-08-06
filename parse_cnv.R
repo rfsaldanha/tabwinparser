@@ -2,9 +2,10 @@ parse_cnv <- function(file){
   
 }
 
-file <- "systems/CNV/UF.CNV"
+file <- "systems/CNV/AGLBR.CNV"
 
 res <- readr::read_fwf(
+  # Read CNV file with positions
   file = file,
   skip = 1,
   col_positions = readr::fwf_positions(
@@ -15,8 +16,26 @@ res <- readr::read_fwf(
   col_types = "cccc",
   locale = locale(encoding = "latin1")
 ) %>%
-  group_by(seq) %>%
+  # Expand rows where cod have commas
+  group_by(row_number()) %>%
   tidyr::expand(cod = strsplit(x = cod, split = ",")[[1]], tidyr::nesting(sub, seq, label)) %>%
   ungroup() %>%
-  relocate(cod, .after = label)
+  relocate(cod, .after = label) %>%
+  # Create sequencies where cod have dash...
+  group_by(row_number()) %>%
+  mutate(cod = paste(seq(from = strsplit(x = teste, split = "-")[[1]][1], to = strsplit(x = teste, split = "-")[[1]][length(strsplit(x = teste, split = "-")[[1]])]), collapse = ",")) %>%
+  ungroup() %>%
+  # ... and expand rows where cod have commas again
+  group_by(row_number()) %>%
+  tidyr::expand(cod = strsplit(x = cod, split = ",")[[1]], tidyr::nesting(sub, seq, label)) %>%
+  ungroup() %>%
+  relocate(cod, .after = label) %>%
+  # Remove artifical row number
+  select(-1)
+  
+
+
+teste <- "530000-530009"
+
+paste(seq(from = strsplit(x = teste, split = "-")[[1]][1], to = strsplit(x = teste, split = "-")[[1]][length(strsplit(x = teste, split = "-")[[1]])]), collapse = ",")
 
