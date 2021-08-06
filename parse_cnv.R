@@ -2,7 +2,7 @@ parse_cnv <- function(file){
   
 }
 
-file <- "systems/CNV/AGLBR.CNV"
+file <- "systems/CNV/UF.CNV"
 
 res <- readr::read_fwf(
   # Read CNV file with positions
@@ -23,7 +23,7 @@ res <- readr::read_fwf(
   relocate(cod, .after = label) %>%
   # Create sequencies where cod have dash...
   group_by(row_number()) %>%
-  mutate(cod = paste(seq(from = strsplit(x = teste, split = "-")[[1]][1], to = strsplit(x = teste, split = "-")[[1]][length(strsplit(x = teste, split = "-")[[1]])]), collapse = ",")) %>%
+  mutate(cod = paste(seq(from = strsplit(x = cod, split = "-")[[1]][1], to = strsplit(x = cod, split = "-")[[1]][length(strsplit(x = cod, split = "-")[[1]])]), collapse = ",")) %>%
   ungroup() %>%
   # ... and expand rows where cod have commas again
   group_by(row_number()) %>%
@@ -35,7 +35,7 @@ res <- readr::read_fwf(
   
 
 
-teste <- "530000-530009"
+teste <- "001-003"
 
 paste(seq(from = strsplit(x = teste, split = "-")[[1]][1], to = strsplit(x = teste, split = "-")[[1]][length(strsplit(x = teste, split = "-")[[1]])]), collapse = ",")
 
