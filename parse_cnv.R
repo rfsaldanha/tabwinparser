@@ -2,7 +2,7 @@ parse_cnv <- function(file){
   
 }
 
-file <- "systems/CNV/UF.CNV"
+file <- "systems/CNV/RACACOR.CNV"
 
 res <- readr::read_fwf(
   # Read CNV file with positions
@@ -22,8 +22,9 @@ res <- readr::read_fwf(
   ungroup() %>%
   relocate(cod, .after = label) %>%
   # Create sequencies where cod have dash...
+  #mutate(cod = paste(seq(from = strsplit(x = cod, split = "-")[[1]][1], to = strsplit(x = cod, split = "-")[[1]][length(strsplit(x = cod, split = "-")[[1]])]), collapse = ",")) %>%
   group_by(row_number()) %>%
-  mutate(cod = paste(seq(from = strsplit(x = cod, split = "-")[[1]][1], to = strsplit(x = cod, split = "-")[[1]][length(strsplit(x = cod, split = "-")[[1]])]), collapse = ",")) %>%
+  mutate(cod = ifelse(test = str_detect(string = cod, pattern = "-"), yes = paste(seq(from = strsplit(x = teste, split = "-")[[1]][1], to = strsplit(x = teste, split = "-")[[1]][length(strsplit(x = teste, split = "-")[[1]])]), collapse = ","), no = cod)) %>%
   ungroup() %>%
   # ... and expand rows where cod have commas again
   group_by(row_number()) %>%
@@ -34,8 +35,10 @@ res <- readr::read_fwf(
   select(-1)
   
 
+mutate(cod = ifelse(str_detect(string = cod, pattern = "-"), "tem -", "nao tem -"))
 
-teste <- "001-003"
+
+teste <- "00-99"
 
 paste(seq(from = strsplit(x = teste, split = "-")[[1]][1], to = strsplit(x = teste, split = "-")[[1]][length(strsplit(x = teste, split = "-")[[1]])]), collapse = ",")
 
