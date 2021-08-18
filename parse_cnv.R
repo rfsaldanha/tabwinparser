@@ -18,8 +18,8 @@ parse_cnv <- function(file){
     dplyr::relocate(cod, .after = label) %>%
     # Create sequencies where cod have dash...
     dplyr::group_by(row_number()) %>%
-    dplyr::mutate(from_dash = ifelse(test = str_detect(string = cod, pattern = "-"), yes = TRUE, no = FALSE)) %>%
-    dplyr::mutate(cod = ifelse(test = str_detect(string = cod, pattern = "-"), yes = paste(seq(from = strsplit(x = cod, split = "-")[[1]][1], to = strsplit(x = cod, split = "-")[[1]][length(strsplit(x = cod, split = "-")[[1]])]), collapse = ","), no = cod)) %>%
+    dplyr::mutate(from_dash = ifelse(test = stringr::str_detect(string = cod, pattern = "-"), yes = TRUE, no = FALSE)) %>%
+    dplyr::mutate(cod = ifelse(test = stringr::str_detect(string = cod, pattern = "-"), yes = paste(seq(from = strsplit(x = cod, split = "-")[[1]][1], to = strsplit(x = cod, split = "-")[[1]][length(strsplit(x = cod, split = "-")[[1]])]), collapse = ","), no = cod)) %>%
     dplyr::ungroup() %>%
     # ... and expand again rows where cod have commas
     dplyr::group_by(row_number()) %>%
