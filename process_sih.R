@@ -1,3 +1,11 @@
+library(tidyverse)
+library(tidytext)
+
+
+source("parse_def.R")
+source("parse_cnv.R")
+
+##### Testes DEF #####
 
 def <- parse_def(file = "systems/RD2008.DEF")
 
@@ -11,6 +19,10 @@ for(def_var in def_variables){
   variable <- def[which(def$variable == def_var), "variable"]
   rule <- def[which(def$variable == def_var), "rule"]
   ref_file <- def[which(def$variable == def_var), "ref_file"]
-  
-  
 }
+
+
+
+##### Testes CNV #####
+
+res <- parse_cnv(file = "systems/CNV/UF.CNV")
